@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GIFT Quiz App</title>
+    <!-- Load Marked.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: auto; }
+        #quiz-container, #result-container { display: none; }
+        .question-result { display: flex; align-items: center; margin: 5px 0; }
+        .correct { color: green; margin-right: 5px; }
+        .incorrect { color: red; margin-right: 5px; }
+    </style>
+</head>
+<body>
+    <h1>GIFT Quiz Applet</h1>
+    <button id="loadQuizBtn">Load GIFT Quiz (Copy/Paste)</button>
+    <textarea id="giftInput" placeholder="Paste GIFT questions here..." rows="10" style="width:100%;"></textarea>
+    <button id="startQuizBtn" style="display:none;">Start Quiz</button>
+    
+    <div id="quiz-container">
+        <h2 id="question-title"></h2>
+        <div id="question-text"></div>
+        <form id="answers-form"></form>
+        <p id="question-number"></p>
+        <!--<button id="prevQuestionBtn">Previous</button>-->
+        <!--<button id="skipQuestionBtn">Skip</button>-->
+        <button id="nextQuestionBtn">Next</button>
+    </div>
+    
+    <div id="result-container">
+        <h2>Quiz Results</h2>
+        <div id="result-list"></div>
+        <p id="finalScore"></p>
+        <button id="retryQuizBtn">Try Again</button>
+        <button id="restartBtn">Restart</button>
+    </div>
+    
+    <!-- Load the custom JavaScript file after Marked.js -->
+    <script src="quiz6.js"></script>
+</body>
+</html>
+

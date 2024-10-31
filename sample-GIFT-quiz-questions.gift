@@ -1,0 +1,193 @@
+//Parts of speech
+
+// question: 8245291  name: Parties du Discours
+::Parties du Discours::[markdown]Donner la partie du discours du mot **laborieusement** dans la phrase\:\nLe 10 avril, les caisses de sécurité sociale et la CSMF( Confédération des syndicats médicaux français) avaient **laborieusement** négocié un compromis, certes imparfait mais dont le mérite était de poser le principe d'un objectif chiffré( 7, 09 % en 1992) exprimant ce qui peut être considéré comme" médicalement justifié".{
+	~PREP
+	~Interj
+	=ADV
+	~DET Int
+	~ADV Int
+	~ADJ Excl/Int
+}
+
+
+// question: 8245292  name: Parties du Discours
+::Parties du Discours::[markdown]Donner la partie du discours du mot **certes** dans la phrase\:\nLe 10 avril, les caisses de sécurité sociale et la CSMF( Confédération des syndicats médicaux français) avaient laborieusement négocié un compromis, **certes** imparfait mais dont le mérite était de poser le principe d'un objectif chiffré( 7, 09 % en 1992) exprimant ce qui peut être considéré comme" médicalement justifié".{
+	~V
+	~V Inf
+	~V Subj
+	~ADJ
+	~Conj de Sub
+	=ADV
+}
+
+
+// question: 8245293  name: Parties du Discours
+::Parties du Discours::[markdown]Donner la partie du discours du mot **mais** dans la phrase\:\nLe 10 avril, les caisses de sécurité sociale et la CSMF( Confédération des syndicats médicaux français) avaient laborieusement négocié un compromis, certes imparfait **mais** dont le mérite était de poser le principe d'un objectif chiffré( 7, 09 % en 1992) exprimant ce qui peut être considéré comme" médicalement justifié".{
+	~DET
+	=ADV
+	~V Part Passé
+	~Conj de Sub
+	~V Subj
+	~PRO Obj
+}
+
+
+// question: 8245294  name: Parties du Discours
+::Parties du Discours::[markdown]Donner la partie du discours du mot **dont** dans la phrase\:\nLe 10 avril, les caisses de sécurité sociale et la CSMF( Confédération des syndicats médicaux français) avaient laborieusement négocié un compromis, certes imparfait mais **dont** le mérite était de poser le principe d'un objectif chiffré( 7, 09 % en 1992) exprimant ce qui peut être considéré comme" médicalement justifié".{
+	~Préf
+	~ADJ
+	~Interj
+	~V
+	=PRO Rel
+	~ADV Int
+}
+
+
+//Parts of speech in English, different tagset
+:: Parties du Discours ::[markdown]   Donner la partie du discours du mot **in** dans la phrase:
+President Bush on Tuesday nominated two individuals to replace retiring jurists on federal courts **in** the Washington area. 
+{
+	~NOUN
+	~Mot_étranger
+	=ADP
+	~PREP
+	~PROPN
+	~X
+	~PRO_Suj
+	~PUNCT
+	~PRON
+	~PRO_Int
+}
+
+
+:: Parties du Discours ::[markdown]   Donner la partie du discours du mot **for** dans la phrase:
+Bush nominated Jennifer M. Anderson **for** a 15- year term as associate judge of the Superior Court of the District of Columbia, replacing Steffen W. Graae. 
+{
+	~ADJ
+	~ADV
+	~AUX
+	=ADP
+	~Conj_de_Sub
+	~PRO_Réfl
+	~Conj_de_Coord
+	~V_Imp
+	~NPr
+	~PRO_Obj
+}
+
+
+:: Parties du Discours ::[markdown]   Donner la partie du discours du mot **as** dans la phrase:
+Bush nominated Jennifer M. Anderson for a 15- year term **as** associate judge of the Superior Court of the District of Columbia, replacing Steffen W. Graae. 
+{
+	~DET
+	~NOUN
+	~INTJ
+	~V_Inf
+	=ADP
+	~PRO_Réfl
+	~PRO
+	~NC
+	~ADJ_Excl/Int
+	~V_Imp
+}
+
+:: Parties du Discours ::[markdown]   Donner la partie du discours du mot **de** dans la phrase:
+De allí procedía la familia del **de** el escritor vallisoletano Blas Pajarero, cuya casa se encuentra en la Plaza de San Pedro; 
+{
+	~ADJ_Excl/Int
+	=ADP
+	~V
+	~V_Inf
+	~CCONJ
+	~Préf
+	~Conj_de_Sub
+	~NC
+	~V_Part_Prés
+	~PRO_Rel
+}
+
+
+:: Parties du Discours ::[markdown]   Donner la partie du discours du mot **se** dans la phrase:
+De allí procedía la familia del de el escritor vallisoletano Blas Pajarero, cuya casa **se** encuentra en la Plaza de San Pedro; 
+{
+	~ADV
+	~NC
+	=PRON
+	~PRO_Int
+	~Conj_de_Coord
+	~ADV_Int
+	~_
+	~DET_Int
+	~Mot_étranger
+	~X
+}
+
+
+:: Parties du Discours ::[markdown]   Donner la partie du discours du mot **en** dans la phrase:
+De allí procedía la familia del de el escritor vallisoletano Blas Pajarero, cuya casa se encuentra **en** la Plaza de San Pedro; 
+{
+	~ADJ
+	=ADP
+	~SCONJ
+	~PRO_Suj
+	~X
+	~V_Subj
+	~PREP_+_DET
+	~Mot_étranger
+	~V_Imp
+	~Conj_de_Coord
+}
+
+
+//Questions on functions
+:: Fonctions ::[markdown]   Donner la fonction de l'élément figurant en gras, dans la phrase:
+Cette exposition nous apprend que dès le XIIe siècle , à Dammarie-sur-Saulx , entre autres sites , une industrie métallurgique **existait** .
+{
+~MOD:nom
+~DEP
+=COD:sub
+~COI:pron
+~COI
+~AGT
+}
+
+:: Fonctions ::[markdown]   Donner la fonction de l'élément figurant en gras, dans la phrase:
+Il a rappelé que plusieurs automobilistes ont **quitté** la chaussée à l' intersection de la RD192 et du chemin rural de la Vaux des Fossés et qu' il convient de modifier le régime de priorité à cet endroit .
+{
+~DEP
+=COD:sub
+~MOD:prép
+~SUJ
+~AGT
+}
+
+:: Fonctions ::[markdown]   Donner la fonction de l'élément figurant en gras, dans la phrase:
+En 1953 , les hauts fourneaux et fonderies de Cousances virent le jour , puis Jean Baudesson , maire échevin de Saint-Dizier , autorisé par lettres patentes d' Henri IV , installa à Marnaval - qui signifiait val ou vallée de la Marne ou bien en aval de la Marne - , une **forge** qui connut son apogée au XIXe siècle .
+{
+~AGT
+~COI:pron
+=COD
+~SUJ
+}
+
+:: Fonctions ::[markdown]   Donner la fonction de l'élément figurant en gras, dans la phrase:
+En 1953 , les hauts fourneaux et fonderies de Cousances virent le jour , puis Jean Baudesson , maire échevin de Saint-Dizier , autorisé par lettres patentes d' Henri IV , installa à Marnaval - qui signifiait val ou vallée de la Marne ou bien en aval de la Marne - , une forge qui connut son **apogée** au XIXe siècle .
+{
+~COD:sub
+~COI:pron
+~COI
+~MOD:adv
+=COD
+~MOD:nom
+}
+
+:: Fonctions ::[markdown]   Donner la fonction de l'élément figurant en gras, dans la phrase:
+Le maire a invité les **membres** du conseil à élaborer le programme d' amélioration de la voirie communale et de la sécurité routière pour l' année 1999 .
+{
+~COD:sub
+~AGT
+=COD
+~COI:pron
+}
+
