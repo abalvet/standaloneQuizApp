@@ -168,7 +168,7 @@ function endQuiz() {
         Total Time: ${(totalQuizTime / 1000).toFixed(2)} seconds<br>
         Average Time per Question: ${(averageTime / 1000).toFixed(2)} seconds<br>
         Skips: ${skips}<br>
-        Total Hesitations: ${hesitations}<br>
+        Total nb of clicks: ${hesitations}<br>
         Total Mouse Distance: ${mouseDistance.toFixed(2)} px
     `;
     document.getElementById('quiz-container').style.display = 'none';
