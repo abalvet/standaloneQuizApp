@@ -80,7 +80,7 @@ function displayQuestion(index) {
     const question = questions[index];
     questionStartTime = Date.now();
     questionMouseDistances[index] = 0;
-    questionHesitations[index] = 0;
+    questionHesitations[index] = -1;
     previousMousePosition = null;
 
     document.getElementById('question-title').innerText = question.title;
@@ -202,7 +202,7 @@ function endQuiz() {
         Total Time: ${(totalQuizTime / 1000).toFixed(2)} seconds<br>
         Average Time per Question: ${(averageTime / 1000).toFixed(2)} seconds<br>
         Skips: ${skips}<br>
-        Total Hesitations: ${hesitations}<br>
+        Total Hesitations: ${hesitations-questions.length}<br>
         Total Mouse Distance: ${mouseDistance.toFixed(2)} px
     `;
     document.getElementById('quiz-container').style.display = 'none';
