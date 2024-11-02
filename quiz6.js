@@ -6,9 +6,8 @@ let questionStartTime, questionTimes = [];
 let skips = 0;
 let hesitations = 0;
 let mouseDistance = 0;
-let questionMouseDistances = [];
-let questionHesitations = [];
 let previousMousePosition = null;
+let previousButtonClicks = 0;
 
 // Load the GIFT questions from the textarea and parse them
 document.getElementById('loadQuizBtn').addEventListener('click', () => {
@@ -34,15 +33,16 @@ document.getElementById('startQuizBtn').addEventListener('click', () => {
     document.getElementById('startQuizBtn').style.display = 'none';
 });
 
-// Parse and validate GIFT questions, and remove curly braces from question text
+// Parse and validate GIFT questions, removing curly braces from question text
 function parseGIFT(input) {
     const lines = input.split('\n');
     let parsedQuestions = [], currentQuestion = null;
 
     lines.forEach(line => {
         line = line.trim();
+        line = line.replace(/[\{\}]/g, "");//get rid of pesky braces
         if (!line || line.startsWith('//')) return;
-        if (line.startsWith('::')) {
+        if (line.startsWith('::')) {            
             if (currentQuestion) parsedQuestions.push(currentQuestion);
             currentQuestion = { 
                 title: line.match(/::(.*?)::/)[1], 
@@ -55,10 +55,11 @@ function parseGIFT(input) {
             if (currentQuestion) currentQuestion.correctAnswer = line.slice(1).trim();
             currentQuestion.answers.push({ text: line.slice(1).trim(), isCorrect: true });
         } else if (line.startsWith('~')) {
-            if (currentQuestion) currentQuestion.answers.push({ text: line.slice(1).trim(), isCorrect: false });
-        } else {
+            if (currentQuestion) currentQuestion.answers.push({ text: line.slice(1).trim(), isCorrect: false });         
+        }
+        else {                              
             if (currentQuestion) {
-                const cleanText = line.replace(/\{.*?\}/g, ''); // Remove curly braces
+                const cleanText = line.replace(/\{.*?\}/g, ''); // Remove curly braces and other undesirable characters
                 currentQuestion.text += cleanText + ' ';
                 currentQuestion.originalText += cleanText + ' ';
             }
@@ -79,9 +80,20 @@ function displayQuestion(index) {
     currentQuestionIndex = index;
     const question = questions[index];
     questionStartTime = Date.now();
-    questionMouseDistances[index] = 0;
-    questionHesitations[index] = -1;
     previousMousePosition = null;
+
+    // Initialize user response data for the question if it doesn't exist
+    if (!userResponses[index]) {
+        userResponses[index] = {
+            hesitations: 0,
+            mouseDistance: 0,
+            selectedAnswer: null,
+            isCorrect: false,
+            questionTime: 0,
+            skipped: false,
+            expectedAnswer: question.correctAnswer
+        };
+    }
 
     document.getElementById('question-title').innerText = question.title;
     document.getElementById('question-text').innerHTML = marked.parse(question.text);
@@ -90,27 +102,22 @@ function displayQuestion(index) {
     const answersForm = document.getElementById('answers-form');
     answersForm.innerHTML = ''; // Clear previous answers
 
+    // Load and display answers with the previously selected answer, if any
     question.answers.forEach((answer, i) => {
         const answerLabel = document.createElement('label');
         answerLabel.innerHTML = `
-            <input type="radio" name="answer" value="${answer.text}">
+            <input type="radio" name="answer" value="${answer.text}" ${userResponses[index].selectedAnswer === answer.text ? 'checked' : ''}>
             ${marked.parseInline(answer.text)}
         `;
-
-        // Add an event listener to track hesitation
         answerLabel.querySelector('input').addEventListener('change', () => {
-            trackHesitation(index);
+            // Update hesitation count when answer changes
+            userResponses[index].hesitations++;
+            hesitations++;
+            userResponses[index].selectedAnswer = answer.text;
         });
-
         answersForm.appendChild(answerLabel);
         answersForm.appendChild(document.createElement('br'));
     });
-}
-
-// Track answer changes for hesitation
-function trackHesitation(questionIndex) {
-    questionHesitations[questionIndex]++;
-    hesitations++;
 }
 
 // Track mouse movement for distance calculation
@@ -120,7 +127,7 @@ document.getElementById('quiz-container').addEventListener('mousemove', (event) 
         const dy = event.clientY - previousMousePosition.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
         mouseDistance += distance;
-        questionMouseDistances[currentQuestionIndex] += distance;
+        userResponses[currentQuestionIndex].mouseDistance += distance;
     }
     previousMousePosition = { x: event.clientX, y: event.clientY };
 });
@@ -128,17 +135,12 @@ document.getElementById('quiz-container').addEventListener('mousemove', (event) 
 // Capture user selection on "Next"
 document.getElementById('nextQuestionBtn').addEventListener('click', () => {
     const selectedOption = document.querySelector('input[name="answer"]:checked');
+    const response = userResponses[currentQuestionIndex];
+    
     if (selectedOption) {
-        const isCorrect = selectedOption.value === questions[currentQuestionIndex].correctAnswer;
-        userResponses.push({ 
-            isCorrect, 
-            questionTime: Date.now() - questionStartTime, 
-            hesitations: questionHesitations[currentQuestionIndex], 
-            mouseDistance: questionMouseDistances[currentQuestionIndex], 
-            selectedAnswer: selectedOption.value,
-            expectedAnswer: questions[currentQuestionIndex].correctAnswer,
-            skipped: false 
-        });
+        response.isCorrect = selectedOption.value === questions[currentQuestionIndex].correctAnswer;
+        response.questionTime = Date.now() - questionStartTime;
+        response.skipped = false;
         nextQuestion();
     } else {
         alert('Please select an answer or use "Skip" to continue.');
@@ -147,18 +149,22 @@ document.getElementById('nextQuestionBtn').addEventListener('click', () => {
 
 // Skip the question
 document.getElementById('skipQuestionBtn').addEventListener('click', () => {
-    const selectedOption = document.querySelector('input[name="answer"]:checked');
-    userResponses.push({ 
-        isCorrect: false, 
-        questionTime: Date.now() - questionStartTime, 
-        hesitations: questionHesitations[currentQuestionIndex], 
-        mouseDistance: questionMouseDistances[currentQuestionIndex], 
-        selectedAnswer: selectedOption ? selectedOption.value : 'null', 
-        expectedAnswer: questions[currentQuestionIndex].correctAnswer,
-        skipped: true 
-    });
+    const response = userResponses[currentQuestionIndex];
+    response.isCorrect = false;
+    response.questionTime = Date.now() - questionStartTime;
+    response.hesitations = 0;
+    response.skipped = true;
+    response.selectedAnswer = 'null';
     skips++;
     nextQuestion();
+});
+
+// Go to the previous question
+document.getElementById('prevQuestionBtn').addEventListener('click', () => {
+    if (currentQuestionIndex > 0) {
+        previousButtonClicks++;
+        displayQuestion(currentQuestionIndex - 1);
+    }
 });
 
 function nextQuestion() {
@@ -180,7 +186,7 @@ function endQuiz() {
     resultContainer.innerHTML = '';
 
     let resultTable = `<table border="1"><tr><th>Question (Original Markdown)</th><th>Status</th><th>Time Spent (s)</th><th>Hesitations</th><th>Mouse Distance (px)</th><th>Selected Answer</th><th>Expected Answer</th></tr>`;
-    questions.forEach((question, i) => {
+    questions.forEach((question, i) => {        
         const response = userResponses[i];
         const status = response.skipped ? 'Skipped' : (response.isCorrect ? '✔️ Correct' : '❌ Incorrect');
         resultTable += `<tr>
@@ -202,8 +208,9 @@ function endQuiz() {
         Total Time: ${(totalQuizTime / 1000).toFixed(2)} seconds<br>
         Average Time per Question: ${(averageTime / 1000).toFixed(2)} seconds<br>
         Skips: ${skips}<br>
-        Total Hesitations: ${hesitations-questions.length}<br>
-        Total Mouse Distance: ${mouseDistance.toFixed(2)} px
+        Total Hesitations: ${hesitations}<br>
+        Total Mouse Distance: ${mouseDistance.toFixed(2)} px<br>
+        Previous Button Clicks: ${previousButtonClicks}
     `;
     document.getElementById('quiz-container').style.display = 'none';
     document.getElementById('result-container').style.display = 'block';
@@ -246,8 +253,8 @@ document.getElementById('retryQuizBtn').addEventListener('click', () => {
     skips = 0;
     hesitations = 0;
     mouseDistance = 0;
-    questionMouseDistances = [];
-    questionHesitations = [];
+    questionTimes = [];
+    previousButtonClicks = 0;
     shuffleQuestionsAndAnswers();
     displayQuestion(0);
     startTime = Date.now();
@@ -256,5 +263,5 @@ document.getElementById('retryQuizBtn').addEventListener('click', () => {
 });
 
 document.getElementById('restartBtn').addEventListener('click', () => {
-    location.reload(); // Reloads the page to allow reloading a new set of questions
+    location.reload();
 });
